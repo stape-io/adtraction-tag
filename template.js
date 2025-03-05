@@ -173,8 +173,7 @@ function getRequestUrl(requestParameters) {
 
   for (const key in requestParameters) {
     const value = requestParameters[key];
-    if (value === undefined || value === null || value === '') continue;
-    requestUrl += '&' + enc(key) + '=' + enc(value);
+    if (isValidValue(value)) requestUrl += '&' + enc(key) + '=' + enc(value);
   }
   
   return requestUrl;

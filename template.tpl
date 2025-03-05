@@ -485,8 +485,7 @@ function getRequestUrl(requestParameters) {
 
   for (const key in requestParameters) {
     const value = requestParameters[key];
-    if (value === undefined || value === null || value === '') continue;
-    requestUrl += '&' + enc(key) + '=' + enc(value);
+    if (isValidValue(value)) requestUrl += '&' + enc(key) + '=' + enc(value);
   }
   
   return requestUrl;
@@ -1027,6 +1026,6 @@ setup: const mockData = {};
 
 ___NOTES___
 
-Created on 3/5/2025, 10:08:30 AM
+Created on 3/5/2025, 10:15:39 AM
 
 
