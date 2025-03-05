@@ -172,7 +172,7 @@ ___TEMPLATE_PARAMETERS___
             "displayName": "By default, the tag will parse all available params from the \u003ci\u003eeventData\u003c/i\u003e. Check the Help Texts from the fields below for more details."
           },
           {
-            "help": "Required.\n\u003cbr\u003e\u003cbr\u003e\nEnter here the Currency code that was provided by Adtraction. The value must be a 3-letter currency code per  ISO 4217 standard (\"EUR\" for example). If you have any questions, contact your account manager.\n\u003cbr\u003e\u003cbr\u003e\nDefault: \u003ci\u003eeventData.currencyCode\u003c/i\u003e \u003e \u003ci\u003eeventData.currency\u003c/i\u003e.",
+            "help": "Required.\n\u003cbr\u003e\u003cbr\u003e\nThe Currency Code that was provided by Adtraction. The value must be a 3-letter currency code per  ISO 4217 standard (\"EUR\" for example). If you have any questions, contact your account manager.\n\u003cbr\u003e\u003cbr\u003e\nDefault: \u003ci\u003eeventData.currencyCode\u003c/i\u003e \u003e \u003ci\u003eeventData.currency\u003c/i\u003e.",
             "displayName": "Currency",
             "simpleValueType": true,
             "name": "currency",
@@ -218,14 +218,14 @@ ___TEMPLATE_PARAMETERS___
             "name": "clickId",
             "displayName": "Click ID Value",
             "simpleValueType": true,
-            "help": "Required.\n\u003cbr\u003e\u003cbr\u003e\nThis value must be the Click ID assigned to the user.\n\u003cbr\u003e\u003cbr\u003e\nDefault: value of \u003ci\u003eat_gd\u003c/i\u003e URL parameter saved in the \u003ci\u003eat_gd\u003c/i\u003e cookie."
+            "help": "Required.\n\u003cbr\u003e\u003cbr\u003e\nClick ID assigned to the user.\n\u003cbr\u003e\u003cbr\u003e\nDefault: value of \u003ci\u003eat_gd\u003c/i\u003e URL parameter saved in the \u003ci\u003eat_gd\u003c/i\u003e cookie."
           },
           {
             "type": "TEXT",
             "name": "md5HashedEmail",
             "displayName": "MD5 Hashed Email",
             "simpleValueType": true,
-            "help": "Optional.\n\u003cbr\u003e\u003cbr\u003e\nPlease pass us the MD5 hashed email of the user. When passing hashed email addresses, make sure that the addresses are converted to lower case, trimmed, converted to UTF-8 and finally hashed using the MD5 algorithm before they are passed into the tag.\n\u003cbr\u003e\u003cbr\u003e\nDefault: \u003ci\u003eeventData.md5HashedEmail\u003c/i\u003e."
+            "help": "Optional.\n\u003cbr\u003e\u003cbr\u003e\nThe MD5 hashed email of the user. When passing hashed email addresses, make sure that the addresses are converted to lower case, trimmed, converted to UTF-8 and finally hashed using the MD5 algorithm before they are passed into the tag.\n\u003cbr\u003e\u003cbr\u003e\nDefault: \u003ci\u003eeventData.md5HashedEmail\u003c/i\u003e."
           },
           {
             "type": "TEXT",
@@ -1027,6 +1027,6 @@ setup: const mockData = {};
 
 ___NOTES___
 
-Created on 3/5/2025, 9:39:23 AM
+Created on 3/5/2025, 10:08:30 AM
 
 
