@@ -401,7 +401,7 @@ function handleConversionEvent() {
         Name: 'Adtraction',
         Type: 'Request',
         TraceId: traceId,
-        EventName: 'Conversion',
+        EventName: data.type,
         RequestMethod: 'GET',
         RequestUrl: requestUrl
       })
@@ -417,7 +417,7 @@ function handleConversionEvent() {
             Name: 'Adtraction',
             Type: 'Response',
             TraceId: traceId,
-            EventName: 'Conversion',
+            EventName: data.type,
             ResponseStatusCode: statusCode,
             ResponseHeaders: headers,
             ResponseBody: body
