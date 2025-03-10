@@ -381,14 +381,16 @@ function handleConversionEvent() {
   
   if (areThereRequiredFieldsMissing(requestParameters)) {
     if (isLoggingEnabled) {
-      logToConsole({
-        Name: 'Adtraction',
-        Type: 'Message',
-        TraceId: traceId,
-        EventName: data.type,
-        Message: 'Conversion event was not sent.',
-        Reason: 'One or more fields are missing: Currency, Order Reference, Click ID Value, or Order Value (if Transaction Type is Sale).'
-      });
+      logToConsole(
+        JSON.stringify({
+          Name: 'Adtraction',
+          Type: 'Message',
+          TraceId: traceId,
+          EventName: data.type,
+          Message: 'Conversion event was not sent.',
+          Reason: 'One or more fields are missing: Currency, Order Reference, Click ID Value, or Order Value (if Transaction Type is Sale).'
+        })
+      );
     }
     return data.gtmOnFailure();
   }
