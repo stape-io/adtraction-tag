@@ -1,5 +1,7 @@
 homepage: 'https://stape.io/'
 versions:
+  - sha: ec2e738fc6fe95bb569590e4debe3b33a95522a0
+    changeNotes: Fixed logging conditions.
   - sha: 5793dbeb033c4e223612c214d311993fb357a7ce
     changeNotes: EventName on logs is now dynamic.
   - sha: 3a42563d3c6b9503844204a8cc2605ef723e1d04
