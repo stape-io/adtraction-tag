@@ -1,5 +1,8 @@
 homepage: 'https://stape.io/'
+documentation: 'https://github.com/stape-io/adtraction-tag'
 versions:
+  - sha: a2d15afe9a3ddee5eaeb91f9a6c909015dfc6a9b
+    changeNotes: Updated tag consent section.
   - sha: ec2e738fc6fe95bb569590e4debe3b33a95522a0
     changeNotes: Fixed logging conditions.
   - sha: 5793dbeb033c4e223612c214d311993fb357a7ce
