@@ -1,21 +1,22 @@
-const getRequestHeader = require('getRequestHeader');
-const getAllEventData = require('getAllEventData');
-const parseUrl = require('parseUrl');
-const setCookie = require('setCookie');
-const getCookieValues = require('getCookieValues');
-const makeString = require('makeString');
-const sendHttpRequest = require('sendHttpRequest');
-const encodeUriComponent = require('encodeUriComponent');
-const JSON = require('JSON');
 const createRegex = require('createRegex');
-const testRegex = require('testRegex');
-const getType = require('getType');
-const logToConsole = require('logToConsole');
+const encodeUriComponent = require('encodeUriComponent');
+const getAllEventData = require('getAllEventData');
 const getContainerVersion = require('getContainerVersion');
+const getCookieValues = require('getCookieValues');
+const getRequestHeader = require('getRequestHeader');
+const getType = require('getType');
+const JSON = require('JSON');
+const logToConsole = require('logToConsole');
+const makeString = require('makeString');
+const parseUrl = require('parseUrl');
+const sendHttpRequest = require('sendHttpRequest');
+const setCookie = require('setCookie');
+const testRegex = require('testRegex');
+
+/**********************************************************************************************/
 
 const isLoggingEnabled = determinateIsLoggingEnabled();
 const traceId = isLoggingEnabled ? getRequestHeader('trace-id') : undefined;
-
 const eventData = getAllEventData();
 
 if (!isConsentGivenOrNotRequired()) {
@@ -64,9 +65,9 @@ function handlePageViewEvent() {
   }
 }
 
-function handleConversionEvent() {  
+function handleConversionEvent() {
   const requestParameters = getRequestParameters();
-  
+
   if (areThereRequiredFieldsMissing(requestParameters)) {
     if (isLoggingEnabled) {
       logToConsole(
@@ -76,7 +77,8 @@ function handleConversionEvent() {
           TraceId: traceId,
           EventName: data.type,
           Message: 'Conversion event was not sent.',
-          Reason: 'One or more fields are missing: Currency, Order Reference, Click ID Value, or Order Value (if Transaction Type is Sale).'
+          Reason:
+            'One or more fields are missing: Currency, Order Reference, Click ID Value, or Order Value (if Transaction Type is Sale).'
         })
       );
     }
@@ -84,7 +86,7 @@ function handleConversionEvent() {
   }
 
   const requestUrl = getRequestUrl(requestParameters);
-  
+
   if (isLoggingEnabled) {
     logToConsole(
       JSON.stringify({
@@ -135,38 +137,40 @@ function getRequestParameters() {
   requestParameters.tp = data.transactionTypeId;
 
   // Required (dynamic) parameters
-  
+
   const currency = data.currency || eventData.currencyCode || eventData.currency;
   requestParameters.c = currency;
-    
-  const orderReference = data.orderReference || eventData.orderId || eventData.order_id || eventData.transaction_id;
+
+  const orderReference =
+    data.orderReference || eventData.orderId || eventData.order_id || eventData.transaction_id;
   requestParameters.ti = orderReference;
-    
-  const orderValue = data.orderValue || eventData.value;
+
+  const orderValue = data.transactionType === 4 ? 0 : data.orderValue || eventData.value;
   requestParameters.am = orderValue;
 
   const clickId = data.clickId || getCookieValues('at_gd')[0];
   requestParameters.at_gd = clickId;
-  
+
   // Optional parameters
-  
+
   const coupon = data.coupon || eventData.coupon;
   if (coupon) requestParameters.cpn = coupon;
-  
+
   const emailMd5Hashed = data.md5HashedEmail || eventData.md5HashedEmail;
-  if (emailMd5Hashed && getType(emailMd5Hashed) === 'string' && isMD5Hash(emailMd5Hashed)) requestParameters.xd = emailMd5Hashed;
-  
+  if (emailMd5Hashed && getType(emailMd5Hashed) === 'string' && isMD5Hash(emailMd5Hashed))
+    requestParameters.xd = emailMd5Hashed;
+
   const channel = data.channel;
   if (channel) requestParameters.ch = channel;
-  
+
   let newCustomer = data.newCustomer;
   if (['false', false, '0', 0].indexOf(newCustomer) !== -1) {
     newCustomer = '0';
   } else if (['true', true, '1', 1].indexOf(newCustomer) !== -1) {
-    newCustomer = '1';  
+    newCustomer = '1';
   }
   if (newCustomer) requestParameters.ct = newCustomer;
-  
+
   return requestParameters;
 }
 
@@ -177,17 +181,18 @@ function getRequestUrl(requestParameters) {
     const value = requestParameters[key];
     if (isValidValue(value)) requestUrl += '&' + enc(key) + '=' + enc(value);
   }
-  
+
   return requestUrl;
 }
 
-function areThereRequiredFieldsMissing(requestParameters) {  
-  const missingCommonRequiredFields = 
-        ['c', 'ti', 'at_gd'].some(p => !isValidValue(requestParameters[p]));
+function areThereRequiredFieldsMissing(requestParameters) {
+  const missingCommonRequiredFields = ['c', 'ti', 'at_gd'].some(
+    (p) => !isValidValue(requestParameters[p])
+  );
   if (missingCommonRequiredFields) return true;
-  
-  const missingSaleOrderValueField = 
-        data.transactionType === 3 && !isValidValue(requestParameters.am);
+
+  const missingSaleOrderValueField =
+    data.transactionType === 3 && !isValidValue(requestParameters.am);
   if (missingSaleOrderValueField) return true;
 
   return false;
@@ -207,7 +212,7 @@ function isValidValue(value) {
 }
 
 function enc(data) {
-  data = data || '';
+  if (['null', 'undefined'].indexOf(getType(data)) !== -1) data = '';
   return encodeUriComponent(makeString(data));
 }
 
