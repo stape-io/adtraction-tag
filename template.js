@@ -1,21 +1,22 @@
-const getRequestHeader = require('getRequestHeader');
-const getAllEventData = require('getAllEventData');
-const parseUrl = require('parseUrl');
-const setCookie = require('setCookie');
-const getCookieValues = require('getCookieValues');
-const makeString = require('makeString');
-const sendHttpRequest = require('sendHttpRequest');
-const encodeUriComponent = require('encodeUriComponent');
-const JSON = require('JSON');
 const createRegex = require('createRegex');
-const testRegex = require('testRegex');
-const getType = require('getType');
-const logToConsole = require('logToConsole');
+const encodeUriComponent = require('encodeUriComponent');
+const getAllEventData = require('getAllEventData');
 const getContainerVersion = require('getContainerVersion');
+const getCookieValues = require('getCookieValues');
+const getRequestHeader = require('getRequestHeader');
+const getType = require('getType');
+const JSON = require('JSON');
+const logToConsole = require('logToConsole');
+const makeString = require('makeString');
+const parseUrl = require('parseUrl');
+const sendHttpRequest = require('sendHttpRequest');
+const setCookie = require('setCookie');
+const testRegex = require('testRegex');
+
+/**********************************************************************************************/
 
 const isLoggingEnabled = determinateIsLoggingEnabled();
 const traceId = isLoggingEnabled ? getRequestHeader('trace-id') : undefined;
-
 const eventData = getAllEventData();
 
 if (!isConsentGivenOrNotRequired()) {
@@ -144,7 +145,7 @@ function getRequestParameters() {
     data.orderReference || eventData.orderId || eventData.order_id || eventData.transaction_id;
   requestParameters.ti = orderReference;
 
-  const orderValue = data.orderValue || eventData.value;
+  const orderValue = data.transactionType === 4 ? 0 : data.orderValue || eventData.value;
   requestParameters.am = orderValue;
 
   const clickId = data.clickId || getCookieValues('at_gd')[0];
