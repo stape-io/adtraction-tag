@@ -1,7 +1,6 @@
 const createRegex = require('createRegex');
 const encodeUriComponent = require('encodeUriComponent');
 const getAllEventData = require('getAllEventData');
-const getContainerVersion = require('getContainerVersion');
 const getCookieValues = require('getCookieValues');
 const getRequestHeader = require('getRequestHeader');
 const getType = require('getType');
@@ -15,8 +14,6 @@ const testRegex = require('testRegex');
 
 /**********************************************************************************************/
 
-const isLoggingEnabled = determinateIsLoggingEnabled();
-const traceId = isLoggingEnabled ? getRequestHeader('trace-id') : undefined;
 const eventData = getAllEventData();
 
 if (!isConsentGivenOrNotRequired()) {
@@ -69,54 +66,22 @@ function handleConversionEvent() {
   const requestParameters = getRequestParameters();
 
   if (areThereRequiredFieldsMissing(requestParameters)) {
-    if (isLoggingEnabled) {
-      logToConsole(
-        JSON.stringify({
-          Name: 'Adtraction',
-          Type: 'Message',
-          TraceId: traceId,
-          EventName: data.type,
-          Message: 'Conversion event was not sent.',
-          Reason:
-            'One or more fields are missing: Currency, Order Reference, Click ID Value, or Order Value (if Transaction Type is Sale).'
-        })
-      );
-    }
+    log({
+      Name: 'Adtraction',
+      Type: 'Message',
+      EventName: data.type,
+      Message: '🛑 [ERROR] Conversion event was not sent.',
+      Reason:
+        'One or more fields are missing: Currency, Order Reference, Click ID Value, or Order Value (if Transaction Type is Sale).'
+    });
     return data.gtmOnFailure();
   }
 
   const requestUrl = getRequestUrl(requestParameters);
 
-  if (isLoggingEnabled) {
-    logToConsole(
-      JSON.stringify({
-        Name: 'Adtraction',
-        Type: 'Request',
-        TraceId: traceId,
-        EventName: data.type,
-        RequestMethod: 'GET',
-        RequestUrl: requestUrl
-      })
-    );
-  }
-
   sendHttpRequest(
     requestUrl,
     (statusCode, headers, body) => {
-      if (isLoggingEnabled) {
-        logToConsole(
-          JSON.stringify({
-            Name: 'Adtraction',
-            Type: 'Response',
-            TraceId: traceId,
-            EventName: data.type,
-            ResponseStatusCode: statusCode,
-            ResponseHeaders: headers,
-            ResponseBody: body
-          })
-        );
-      }
-
       if (statusCode >= 200 && statusCode < 300) {
         data.gtmOnSuccess();
       } else {
@@ -208,7 +173,7 @@ function isMD5Hash(str) {
 
 function isValidValue(value) {
   const valueType = getType(value);
-  return valueType !== 'null' && valueType !== 'undefined' && value !== '';
+  return valueType !== 'null' && valueType !== 'undefined' && value !== '' && value === value;
 }
 
 function enc(data) {
@@ -223,24 +188,7 @@ function isConsentGivenOrNotRequired() {
   return xGaGcs[2] === '1';
 }
 
-function determinateIsLoggingEnabled() {
-  const containerVersion = getContainerVersion();
-  const isDebug = !!(
-    containerVersion &&
-    (containerVersion.debugMode || containerVersion.previewMode)
-  );
-
-  if (!data.logType) {
-    return isDebug;
-  }
-
-  if (data.logType === 'no') {
-    return false;
-  }
-
-  if (data.logType === 'debug') {
-    return isDebug;
-  }
-
-  return data.logType === 'always';
+function log(rawDataToLog) {
+  rawDataToLog.TraceId = getRequestHeader('trace-id');
+  logToConsole(JSON.stringify(rawDataToLog));
 }
