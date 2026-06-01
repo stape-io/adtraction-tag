@@ -1,6 +1,8 @@
 homepage: 'https://stape.io/'
 documentation: 'https://github.com/stape-io/adtraction-tag'
 versions:
+  - sha: 87fc8e2f3cc6ddce5f774bfe81a15742ee499572
+    changeNotes: Logging removal.
   - sha: aa637e5a16f2786545a2a581686f7448500d4b48
     changeNotes: Fixed Lead value.
   - sha: a2d15afe9a3ddee5eaeb91f9a6c909015dfc6a9b
